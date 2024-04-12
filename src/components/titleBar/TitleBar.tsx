@@ -17,7 +17,8 @@ function TitleBarButton({onClick,altText,iconUrl}: Readonly<TitleBarButtonProps>
 
 function TitleBar() {
   return (
-    <div data-tauri-drag-region className="titlebar">
+    <div className="titlebar">
+      <h1 data-tauri-drag-region  className="title">Telemetry v1.0</h1>
       <TitleBarButton
         onClick={() => appWindow.minimize()}
         altText="minimize"
