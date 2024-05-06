@@ -1,16 +1,16 @@
 import { appWindow } from "@tauri-apps/api/window";
+import { Icon } from '@iconify/react';
 import "./TitleBar.css";
 
 interface TitleBarButtonProps {
   onClick: () => void;
-  altText: string;
   iconUrl: string;
 }
 
-function TitleBarButton({onClick,altText,iconUrl}: Readonly<TitleBarButtonProps>) {
+function TitleBarButton({onClick,iconUrl}: Readonly<TitleBarButtonProps>) {
   return (
     <button className="titlebar-button" onClick={onClick}>
-      <img src={iconUrl} alt={altText} />
+      <Icon icon={iconUrl}/>
     </button>
   );
 }
@@ -21,18 +21,15 @@ function TitleBar() {
       <h1 data-tauri-drag-region  className="title">Telemetry v1.0</h1>
       <TitleBarButton
         onClick={() => appWindow.minimize()}
-        altText="minimize"
-        iconUrl="https://api.iconify.design/mdi:window-minimize.svg"
+        iconUrl="mdi:window-minimize"
       />
       <TitleBarButton
         onClick={() => appWindow.maximize()}
-        altText="maximize"
-        iconUrl="https://api.iconify.design/mdi:window-maximize.svg"
+        iconUrl="mdi:window-maximize"
       />
       <TitleBarButton
         onClick={() => appWindow.close()}
-        altText="close"
-        iconUrl="https://api.iconify.design/mdi:close.svg"
+        iconUrl="mdi:close"
       />
     </div>
   );

@@ -1,0 +1,30 @@
+.connection {
+    background-color: #FAFAFA;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.connection select {
+    margin: 10px;
+    min-width: 60px;
+}
+
+.connection button {
+    margin: 10px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+}
+.connection button:hover {
+    border-color: #FF4500;
+}
+.connection button:active {
+    background-color: #FF672E;
+}
