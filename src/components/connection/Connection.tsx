@@ -1,33 +1,40 @@
 import { useEffect, useState } from "react";
-import { handleGetPorts } from "../../utils/Utils";
+import { getBaudList, handleGetPorts } from "../../utils/Utils";
 import { Icon } from "@iconify/react";
 import "./Connection.css";
 import useDevice from "../../hooks/UseDevice";
 
 interface ConnectionButtonProps {
   onClick: () => void;
+  text?: string;
   iconUrl: string;
 }
 
 function ConnectionButton({
   onClick,
+  text,
   iconUrl,
 }: Readonly<ConnectionButtonProps>) {
   return (
-    <button onClick={onClick}>
+    <button onClick={onClick} title={text}>
       <Icon icon={iconUrl} />
     </button>
   );
 }
 
 function Connection() {
-  const { setDevicePort } = useDevice();
+  const baudrateList = getBaudList();
+  const { setBaudrate, setDevicePort } = useDevice();
+  const [rate, setRate] = useState<number>(9600);
   const [port, setPort] = useState<string | undefined>(undefined);
   const [portsListed, setPortsListed] = useState<string[]>([]);
 
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+  function handlePortChange(e: React.ChangeEvent<HTMLSelectElement>): void {
     setPort(e.target.value);
-    console.log(port);
+  }
+
+  function handleBaudrateChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+    setRate(+e.target.value);
   }
 
   useEffect(() => {
@@ -37,9 +44,8 @@ function Connection() {
   return (
     <div className="connection">
       <label>
-        {" "}
         Select your device:
-        <select value={port} onChange={handleChange}>
+        <select onChange={handlePortChange}>
           <option disabled> devices </option>
           {portsListed.length > 0 ? (
             portsListed.map((port) => {
@@ -54,14 +60,29 @@ function Connection() {
           )}
         </select>
       </label>
+      <label>
+        baudrate:
+        <select onChange={handleBaudrateChange} defaultValue={9600}>
+          {baudrateList.map((rate) => {
+            return (
+              <option key={rate} value={rate}>
+                {rate}
+              </option>
+            );
+          })}
+        </select>
+      </label>
       <section>
         <ConnectionButton
+          text="connect"
           iconUrl="mdi:play-arrow"
           onClick={() => {
-            port ? setDevicePort(port) : console.log("no device message");
+            setDevicePort(port);
+            setBaudrate(rate);
           }}
         />
         <ConnectionButton
+          text="search"
           iconUrl="mdi:restart"
           onClick={() => {
             handleGetPorts(setPortsListed);
