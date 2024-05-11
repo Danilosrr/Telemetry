@@ -1,5 +1,5 @@
-use serialport::*;
-use std::time::Duration;
+//use serialport::*;
+//use std::time::Duration;
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -18,7 +18,7 @@ pub fn list_ports() -> Vec<String> {
 }
 
 // try to init the serial and return the port
-pub fn init_port(port_path: String, baud_rate: u32) -> Result<Box<dyn SerialPort>> {
+/*pub fn init_port(port_path: String, baud_rate: u32) -> Result<Box<dyn SerialPort>> {
     println!("Opening port: {}, baud: {}", port_path, baud_rate);
     let port = serialport::new(port_path, baud_rate)
         .timeout(Duration::from_millis(10))
@@ -26,4 +26,4 @@ pub fn init_port(port_path: String, baud_rate: u32) -> Result<Box<dyn SerialPort
 
     // return port
     return Ok(port);
-}
+}*/
