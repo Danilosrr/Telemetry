@@ -5,7 +5,7 @@ import "./Graphs.css";
 
 function Graphs() {
   const { devicePort } = useDevice();
-  const dataSample = {accX:0, accY:0, accZ:0};
+  const dataSample = {accX:0, accY:0, accZ:0, roll:0, pitch: 0};
 
   return (
     <section className="chartContainer">

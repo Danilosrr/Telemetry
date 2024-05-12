@@ -1,25 +1,18 @@
 .chartContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Three columns with minimum width */
+    grid-auto-rows: auto; /* Automatically adjust row height */
+    overflow: scroll;
+    gap: 20px;
     position: fixed;
     top: 60px;
     left: 0;
     right: 0;
     bottom: 30px;
-    overflow: scroll;
 }
 
 .chart {
-    flex: 1;
-    flex-basis: 500px;
-    box-sizing: border-box;
+    height: fit-content;
+    margin-bottom: 2px; /* Space between rows */
     border: 1px dashed #D1D1D1;
-    margin: 2px;
-}
-
-.chart canvas {
-    width: 100%;
-    max-height: 300px;
 }

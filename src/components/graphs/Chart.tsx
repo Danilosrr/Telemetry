@@ -26,9 +26,6 @@ interface ILineChart {
 
 function LineChart({ label, color }: Readonly<ILineChart>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const size = useRef(containerRef);
-  const [chartInstace, setChartInstance] = useState<Chart | null>(null);
 
   Chart.register(
     TimeScale,
@@ -99,14 +96,12 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
   useEffect(() => {
     const chart = canvasRef.current as HTMLCanvasElement;
 
-    const chartInstance = new Chart(chart, commonOptions(label, color));
-    setChartInstance(chartInstace);
+    new Chart(chart, commonOptions(label, color));
   }, []);
 
-  useEffect(()=>{chartInstace?.resize(size.current.current?.getBoundingClientRect().width,size.current.current?.getBoundingClientRect().height);},[size])
 
   return (
-    <div className="chart" ref={containerRef}>
+    <div className="chart">
       <canvas ref={canvasRef}></canvas>
     </div>
   );
