@@ -11,112 +11,92 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import ChartStreaming from "chartjs-plugin-streaming";
 import { useEffect, useRef } from "react";
 import "chartjs-adapter-date-fns";
+
 import "./Graphs.css";
 
 interface ILineChart {
-  label:string, 
-  color:string,
-  rate: number, //ms
-  range?: number, //seconds
+  label: string;
+  color: string;
+  rate: number; //ms
+  range?: number; //seconds
 }
 
-function commonOptions(title: string,color:string, rate:number) {
+function LineChart({ label, color }: Readonly<ILineChart>) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   Chart.register(
     TimeScale,
     LineController,
     PointElement,
     LinearScale,
     LineElement,
+    ChartStreaming,
     Filler,
     Title,
     Tooltip,
     Legend
   );
 
-  const config = {
-    type: "line",
-    data: {
-      labels:[new Date()],
-      datasets: [
-        {
-          label: title,
-          data: [0],
-          fill: false,
-          borderColor: color,
-          borderWidth: 2,
-          pointRadius: 1,
-          cubicInterpolationMode: "monotone",
-          beginAtZero: true
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        tooltip: {
+  function commonOptions(title: string, color: string) {
+    const config = {
+      type: "line",
+      data: {
+        labels: [new Date()],
+        datasets: [
+          {
+            label: title,
+            data: [0],
+            fill: false,
+            borderColor: color,
+            borderWidth: 2,
+            pointRadius: 1,
+            cubicInterpolationMode: "monotone",
+            beginAtZero: true,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
             enabled: false,
-        }
-      },
-      animation: {
-        duration: rate
-      },
-      scales: {
-        x: {
-          type: "time",
-          time: {
-            unit: 'minute',
           },
-          grid: {
-            display: false
-          },
-          ticks:{
-            source: 'data',
-            maxTicksLimit: 10
-          }
         },
-        y: {
-          display: true,
-          beginAtZero: true,
-          ticks: {
-            autoSkip: true,
+        scales: {
+          x: {
+            type: "realtime",
+            realtime: {
+              duration: 20000,
+              refresh: 1000,
+              delay: 2000,
+              onRefresh: (chart: Chart) => {
+                chart.data.labels?.push(new Date());
+                chart.data.datasets[0].data.push(Math.random() * 20);
+                chart.update()
+              },
+            },
+          },
+          y: {
+            display: true,
+            beginAtZero: true,
+            ticks: {
+              autoSkip: true,
+            },
           },
         },
       },
-    },
-  };
+    };
 
-  return config as ChartConfiguration;
-}
-
-function LineChart({label, color, rate, range}:Readonly<ILineChart>) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+    return config as ChartConfiguration;
+  }
 
   useEffect(() => {
     const xAccelChart = canvasRef.current as HTMLCanvasElement;
 
-    const xAccelChartInstance = new Chart(
-      xAccelChart,
-      commonOptions(label,color, rate)
-    );
-
-    
-    setInterval(()=>{updateData(xAccelChartInstance)},rate)
+    new Chart(xAccelChart, commonOptions(label, color));
   }, []);
-
-  function updateData(chartInstance:Chart){//placeholder for visualization
-    if (range && chartInstance.data.datasets[0].data.length>(range*1000/rate)){//limit the elements number to the time range chosen
-      chartInstance.data.labels?.shift();
-      chartInstance.data.datasets[0].data.shift();
-    }
-
-    chartInstance?.data?.labels?.push(new Date());
-    chartInstance?.data.datasets[0].data.push(Math.random()*20);
-    
-    console.log(`${chartInstance.data.datasets[0].data.length}, ${(range*1000/rate)}`)
-    chartInstance?.update(); 
-  }
 
   return (
     <div className="chart">
