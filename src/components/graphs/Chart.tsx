@@ -12,7 +12,7 @@ import {
   Tooltip,
 } from "chart.js";
 import ChartStreaming from "chartjs-plugin-streaming";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "chartjs-adapter-date-fns";
 
 import "./Graphs.css";
@@ -26,6 +26,10 @@ interface ILineChart {
 
 function LineChart({ label, color }: Readonly<ILineChart>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const size = useRef(containerRef);
+  const [chartInstace, setChartInstance] = useState<Chart | null>(null);
+
   Chart.register(
     TimeScale,
     LineController,
@@ -74,7 +78,7 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
               onRefresh: (chart: Chart) => {
                 chart.data.labels?.push(new Date());
                 chart.data.datasets[0].data.push(Math.random() * 20);
-                chart.update()
+                chart.update();
               },
             },
           },
@@ -93,13 +97,16 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
   }
 
   useEffect(() => {
-    const xAccelChart = canvasRef.current as HTMLCanvasElement;
+    const chart = canvasRef.current as HTMLCanvasElement;
 
-    new Chart(xAccelChart, commonOptions(label, color));
+    const chartInstance = new Chart(chart, commonOptions(label, color));
+    setChartInstance(chartInstace);
   }, []);
 
+  useEffect(()=>{chartInstace?.resize(size.current.current?.getBoundingClientRect().width,size.current.current?.getBoundingClientRect().height);},[size])
+
   return (
-    <div className="chart">
+    <div className="chart" ref={containerRef}>
       <canvas ref={canvasRef}></canvas>
     </div>
   );
