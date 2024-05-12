@@ -1,4 +1,5 @@
 .titlebar {
+  z-index: 1;
   height: 30px;
   background: #EBEBEB;
   user-select: none;

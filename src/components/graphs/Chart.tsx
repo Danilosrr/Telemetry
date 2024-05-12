@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import { useEffect, useRef } from "react";
 import "chartjs-adapter-date-fns";
-import "./Chart.css";
+import "./Graphs.css";
 
 function commonOptions(title: string) {
   Chart.register(
@@ -46,8 +46,8 @@ function commonOptions(title: string) {
           type: "time",
           time: {
             displayFormats: {
-              hour: "HH:mm"
-            }
+              hour: "HH:mm",
+            },
           },
         },
         y: {
@@ -91,10 +91,8 @@ function LineChart() {
   }, []);
 
   return (
-    <div id="accelContainer" className="container">
-      <div id="xAccel" className="x">
-        <canvas ref={canvasRef}></canvas>
-      </div>
+    <div className="chart">
+      <canvas ref={canvasRef}></canvas>
     </div>
   );
 }
