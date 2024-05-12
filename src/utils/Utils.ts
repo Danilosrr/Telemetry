@@ -1,6 +1,8 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
-async function handleGetPorts(setPortsListed: React.Dispatch<React.SetStateAction<string[]>>) {
+async function handleGetPorts(
+  setPortsListed: React.Dispatch<React.SetStateAction<string[]>>
+) {
   const ports: string[] = await invoke("get_ports", {});
   setPortsListed(ports);
 }
@@ -27,4 +29,16 @@ async function handleSetFolder() {
   await invoke("set_folder_path", {});
 }
 
-export { handleGetPorts, handleSetFolder, getBaudList };
+function generateRandomColor() {
+  let colorHex: string = "#";
+
+  for (let i = 0; i < 3; i++) {
+    let color = Math.floor(Math.random() * 200 + 55);
+    color.toString(16).padStart(2, "0");
+    colorHex += color;
+  }
+
+  return colorHex;
+}
+
+export { handleGetPorts, handleSetFolder, getBaudList, generateRandomColor };

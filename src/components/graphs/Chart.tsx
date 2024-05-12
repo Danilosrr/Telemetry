@@ -1,6 +1,7 @@
 import {
   Chart,
   ChartConfiguration,
+  Filler,
   Legend,
   LineController,
   LineElement,
@@ -14,13 +15,21 @@ import { useEffect, useRef } from "react";
 import "chartjs-adapter-date-fns";
 import "./Graphs.css";
 
-function commonOptions(title: string) {
+interface ILineChart {
+  label:string, 
+  color:string,
+  rate: number, //ms
+  range?: number, //seconds
+}
+
+function commonOptions(title: string,color:string, rate:number) {
   Chart.register(
     TimeScale,
     LineController,
     PointElement,
     LinearScale,
     LineElement,
+    Filler,
     Title,
     Tooltip,
     Legend
@@ -29,34 +38,49 @@ function commonOptions(title: string) {
   const config = {
     type: "line",
     data: {
+      labels:[new Date()],
       datasets: [
         {
           label: title,
           data: [0],
           fill: false,
-          borderColor: "#343e9a",
-          borderWidth: 1,
+          borderColor: color,
+          borderWidth: 2,
+          pointRadius: 1,
+          cubicInterpolationMode: "monotone",
+          beginAtZero: true
         },
       ],
     },
     options: {
       responsive: true,
+      plugins: {
+        tooltip: {
+            enabled: false,
+        }
+      },
+      animation: {
+        duration: rate
+      },
       scales: {
         x: {
           type: "time",
           time: {
-            displayFormats: {
-              hour: "HH:mm",
-            },
+            unit: 'minute',
           },
+          grid: {
+            display: false
+          },
+          ticks:{
+            source: 'data',
+            maxTicksLimit: 10
+          }
         },
         y: {
           display: true,
           beginAtZero: true,
-          title: {
-            display: true,
-            text: title,
-            font: { size: 16 },
+          ticks: {
+            autoSkip: true,
           },
         },
       },
@@ -66,29 +90,33 @@ function commonOptions(title: string) {
   return config as ChartConfiguration;
 }
 
-function LineChart() {
+function LineChart({label, color, rate, range}:Readonly<ILineChart>) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const xAccelChart = canvasRef.current as HTMLCanvasElement;
-    console.log(xAccelChart);
 
-    if (xAccelChart) {
-      const xAccelChartInstance = new Chart(
-        xAccelChart,
-        commonOptions("X Acceleration")
-      );
-      function addData(data: number) {
-        if (data) {
-          xAccelChartInstance.data?.labels?.push(new Date());
-          xAccelChartInstance.data.datasets.forEach((dataset) => {
-            dataset.data.push(data);
-          });
-          xAccelChartInstance.update();
-        }
-      }
-    }
+    const xAccelChartInstance = new Chart(
+      xAccelChart,
+      commonOptions(label,color, rate)
+    );
+
+    
+    setInterval(()=>{updateData(xAccelChartInstance)},rate)
   }, []);
+
+  function updateData(chartInstance:Chart){//placeholder for visualization
+    if (range && chartInstance.data.datasets[0].data.length>(range*1000/rate)){//limit the elements number to the time range chosen
+      chartInstance.data.labels?.shift();
+      chartInstance.data.datasets[0].data.shift();
+    }
+
+    chartInstance?.data?.labels?.push(new Date());
+    chartInstance?.data.datasets[0].data.push(Math.random()*20);
+    
+    console.log(`${chartInstance.data.datasets[0].data.length}, ${(range*1000/rate)}`)
+    chartInstance?.update(); 
+  }
 
   return (
     <div className="chart">
