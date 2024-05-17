@@ -1,10 +1,26 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
+interface IDevice {
+  port: string;
+  baudrate: number;
+}
+
 async function handleGetPorts(
   setPortsListed: React.Dispatch<React.SetStateAction<string[]>>
 ) {
   const ports: string[] = await invoke("get_ports", {});
   setPortsListed(ports);
+}
+
+async function handleConnect(device:IDevice, setBaudrate:(rate: number) => void, setDevicePort:(port: string) => void) {
+  try {
+    /*invoke("set_port_items", {port, baud});
+    await invoke("handle_serial_connect", {});*/
+    setBaudrate(device.baudrate);
+    setDevicePort(device.port);
+  } catch (error) {
+    console.log(error);
+  };
 }
 
 function getBaudList() {
@@ -30,15 +46,8 @@ async function handleSetFolder() {
 }
 
 function generateRandomColor() {
-  let colorHex: string = "#";
-
-  for (let i = 0; i < 3; i++) {
-    let color = Math.floor(Math.random() * 200 + 55);
-    color.toString(16).padStart(2, "0");
-    colorHex += color;
-  }
-
-  return colorHex;
+  let randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+  return randomColor;
 }
 
-export { handleGetPorts, handleSetFolder, getBaudList, generateRandomColor };
+export { handleGetPorts, handleConnect, handleSetFolder, getBaudList, generateRandomColor };

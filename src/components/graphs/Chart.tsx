@@ -14,7 +14,6 @@ import {
 import ChartStreaming from "chartjs-plugin-streaming";
 import { useEffect, useRef, useState } from "react";
 import "chartjs-adapter-date-fns";
-
 import "./Graphs.css";
 
 interface ILineChart {

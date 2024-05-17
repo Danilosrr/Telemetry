@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBaudList, handleGetPorts } from "../../utils/Utils";
+import { getBaudList, handleConnect, handleGetPorts } from "../../utils/Utils";
 import { Icon } from "@iconify/react";
 import useDevice from "../../hooks/UseDevice";
 import "./Connection.css";
@@ -24,9 +24,9 @@ function ConnectionButton({
 
 function Connection() {
   const baudrateList = getBaudList();
-  const { devicePort, setBaudrate, setDevicePort } = useDevice();
-  const [rate, setRate] = useState<number>(9600);
-  const [port, setPort] = useState<string | undefined>(undefined);
+  const {...device} = useDevice();
+  const [baudrate, setBaudrate] = useState<number>(9600);
+  const [port, setPort] = useState<string>('');
   const [portsListed, setPortsListed] = useState<string[]>([]);
 
   function handlePortChange(e: React.ChangeEvent<HTMLSelectElement>): void {
@@ -34,7 +34,7 @@ function Connection() {
   }
 
   function handleBaudrateChange(e: React.ChangeEvent<HTMLSelectElement>): void {
-    setRate(+e.target.value);
+    setBaudrate(+e.target.value);
   }
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function Connection() {
           {portsListed.length > 0 ? (
             portsListed.map((port) => {
               return (
-                <option key={port} value={port} selected={port==devicePort}>
+                <option key={port} value={port} selected={port==device.devicePort}>
                   {port}
                 </option>
               );
@@ -77,8 +77,7 @@ function Connection() {
           text="connect"
           iconUrl="mdi:play-arrow"
           onClick={() => {
-            setDevicePort(port);
-            setBaudrate(rate);
+            handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort)
           }}
         />
         <ConnectionButton
