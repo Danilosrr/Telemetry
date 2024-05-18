@@ -1,10 +1,11 @@
 import { createContext, useState } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 
 interface IDeviceContext {
   devicePort: string | undefined;
   setDevicePort: (port: string | undefined) => void;
-  baudrate: number | undefined;
-  setBaudrate: (rate: number) => void;
+  baudrate: string | undefined;
+  setBaudrate: (rate: string) => void;
   handleDisconnect: () => void;
 }
 
@@ -12,9 +13,11 @@ export const DeviceContext = createContext<IDeviceContext | null>(null);
 
 export function DeviceProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [devicePort, setDevicePort] = useState<string | undefined>(undefined);
-  const [baudrate, setBaudrate] = useState<number | undefined>(9600);
+  const [baudrate, setBaudrate] = useState<string | undefined>('9600');
 
-  function handleDisconnect() {
+  async function handleDisconnect() {
+    invoke("set_port_items", {});
+    await invoke("handle_serial_connect", {});
     setBaudrate(undefined);
     setDevicePort(undefined);
   }

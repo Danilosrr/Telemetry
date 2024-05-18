@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 interface IDevice {
   port: string;
-  baudrate: number;
+  baudrate: string;
 }
 
 async function handleGetPorts(
@@ -12,15 +12,23 @@ async function handleGetPorts(
   setPortsListed(ports);
 }
 
-async function handleConnect(device:IDevice, setBaudrate:(rate: number) => void, setDevicePort:(port: string) => void) {
+async function handleError(input: string) {
+  await invoke("emit_error", { input });
+}
+
+async function handleConnect(
+  device: IDevice,
+  setBaudrate: (rate: string) => void,
+  setDevicePort: (port: string) => void
+) {
   try {
-    /*invoke("set_port_items", {port, baud});
-    await invoke("handle_serial_connect", {});*/
+    invoke("set_port_items", { ...device });
+    await invoke("handle_serial_connect", {});
     setBaudrate(device.baudrate);
     setDevicePort(device.port);
   } catch (error) {
-    console.log(error);
-  };
+    handleError("Could not connect to device");
+  }
 }
 
 function getBaudList() {
@@ -46,8 +54,17 @@ async function handleSetFolder() {
 }
 
 function generateRandomColor() {
-  let randomColor = "#000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+  let randomColor = "#000000".replace(/0/g, function () {
+    return (~~(Math.random() * 16)).toString(16);
+  });
   return randomColor;
 }
 
-export { handleGetPorts, handleConnect, handleSetFolder, getBaudList, generateRandomColor };
+export {
+  handleGetPorts,
+  handleError,
+  handleConnect,
+  handleSetFolder,
+  getBaudList,
+  generateRandomColor,
+};

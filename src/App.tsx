@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
 import { DeviceProvider } from "./contexts/DeviceContext";
 import Data from "./page/Data";
-import "./App.css";
 
 function App() {
   return (

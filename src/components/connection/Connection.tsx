@@ -25,7 +25,7 @@ function ConnectionButton({
 function Connection() {
   const baudrateList = getBaudList();
   const {...device} = useDevice();
-  const [baudrate, setBaudrate] = useState<number>(9600);
+  const [baudrate, setBaudrate] = useState<string>('9600');
   const [port, setPort] = useState<string>('');
   const [portsListed, setPortsListed] = useState<string[]>([]);
 
@@ -34,7 +34,7 @@ function Connection() {
   }
 
   function handleBaudrateChange(e: React.ChangeEvent<HTMLSelectElement>): void {
-    setBaudrate(+e.target.value);
+    setBaudrate(e.target.value);
   }
 
   useEffect(() => {
@@ -62,7 +62,7 @@ function Connection() {
       </label>
       <label>
         baudrate:
-        <select onChange={handleBaudrateChange} defaultValue={9600}>
+        <select onChange={handleBaudrateChange} defaultValue={'9600'}>
           {baudrateList.map((rate) => {
             return (
               <option key={rate} value={rate}>
