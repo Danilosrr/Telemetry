@@ -45,8 +45,7 @@ function Connection() {
     <div className="connection">
       <label>
         Select your device:
-        <select onChange={handlePortChange}>
-          <option disabled> devices </option>
+        <select onChange={handlePortChange} disabled={device.connected}>
           {portsListed.length > 0 ? (
             portsListed.map((port) => {
               return (
@@ -62,7 +61,7 @@ function Connection() {
       </label>
       <label>
         baudrate:
-        <select onChange={handleBaudrateChange} defaultValue={'9600'}>
+        <select onChange={handleBaudrateChange} defaultValue={'9600'} disabled={device.connected}>
           {baudrateList.map((rate) => {
             return (
               <option key={rate} value={rate}>
@@ -73,11 +72,18 @@ function Connection() {
         </select>
       </label>
       <section>
+      {device.connected?
+      <ConnectionButton 
+        text="disconnect" 
+        iconUrl="mdi:lan-disconnect" 
+        onClick={device.handleDisconnect}
+      />:
+      <>
         <ConnectionButton
           text="connect"
           iconUrl="mdi:play-arrow"
           onClick={() => {
-            handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort)
+            handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort,device.setConnected)
           }}
         />
         <ConnectionButton
@@ -87,6 +93,7 @@ function Connection() {
             handleGetPorts(setPortsListed);
           }}
         />
+      </>}
       </section>
     </div>
   );

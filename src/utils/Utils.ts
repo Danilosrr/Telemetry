@@ -19,7 +19,8 @@ async function handleError(input: string) {
 async function handleConnect(
   device: IDevice,
   setBaudrate: (rate: string) => void,
-  setDevicePort: (port: string) => void
+  setDevicePort: (port: string) => void,
+  setConnected: (connection: boolean) => void,
 ) {
   try {
     invoke("set_port_items", { ...device });
@@ -27,6 +28,7 @@ async function handleConnect(
     if (serial) {
       setBaudrate(device.baudrate);
       setDevicePort(device.port);
+      setConnected(true);
     }
   } catch (error) {
     handleError("Could not connect to device");
