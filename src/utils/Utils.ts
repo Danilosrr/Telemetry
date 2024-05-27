@@ -23,11 +23,14 @@ async function handleConnect(
 ) {
   try {
     invoke("set_port_items", { ...device });
-    await invoke("handle_serial_connect", {});
-    setBaudrate(device.baudrate);
-    setDevicePort(device.port);
+    const serial = await invoke("handle_serial_connect", {});
+    if (serial) {
+      setBaudrate(device.baudrate);
+      setDevicePort(device.port);
+    }
   } catch (error) {
     handleError("Could not connect to device");
+    console.log(`serial catch`);
   }
 }
 

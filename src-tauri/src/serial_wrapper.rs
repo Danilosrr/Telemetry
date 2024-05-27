@@ -1,6 +1,3 @@
-//use serialport::*;
-//use std::time::Duration;
-
 use serialport::*;
 use std::sync::{
     atomic::{AtomicBool, Ordering},
@@ -15,14 +12,9 @@ struct Payload {
     message: String,
 }
 
-// list the ports and return a vector of strings
 pub fn list_ports() -> Vec<String> {
-    // get the ports from serialport::available_ports()
     let ports = serialport::available_ports().expect("No ports found!");
-    // make a vecotor of strings then create an iterator of ports then map port names an clone
-    // and collect them into the vector
     let port_list: Vec<String> = ports.iter().map(|p| p.port_name.clone()).collect();
-    // return tfhe ports list
     return port_list;
 }
 
@@ -31,8 +23,6 @@ pub fn init_port(port_path: String, baud_rate: u32) -> Result<Box<dyn SerialPort
     let port = serialport::new(port_path, baud_rate)
         .timeout(Duration::from_millis(10))
         .open()?;
-
-    // return port
     return Ok(port);
 }
 
@@ -62,13 +52,11 @@ pub fn start_clone_thread(
                         }
                     }
                     Err(ref e) if e.kind() == io::ErrorKind::TimedOut => (),
-                    Err(e) => {
+                    Err(_e) => {
                         let app_clone = app.clone();
                         use crate::AppData;
                         let state = app_clone.state::<AppData>();
                         let mut state_guard: std::sync::MutexGuard<crate::Data> = state.0.lock().unwrap();
-                        let port_path = state_guard.port_items.port_path.clone();
-                        let baud_rate = state_guard.port_items.baud_rate.clone();
                         state_guard.port = None;
 
                         is_thread_open.store(false, Ordering::Relaxed);
