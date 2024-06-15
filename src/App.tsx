@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./page/Home";
 import { DeviceProvider } from "./contexts/DeviceContext";
+import { BufferProvider } from "./contexts/BufferContext";
 import Data from "./page/Data";
 
 function App() {
   return (
     <DeviceProvider>
+    <BufferProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -15,6 +17,7 @@ function App() {
           <Route path="/help" element={<Home />} />
         </Routes>
       </BrowserRouter>
+      </BufferProvider>
     </DeviceProvider>
   );
 }

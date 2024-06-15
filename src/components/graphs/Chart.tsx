@@ -2,6 +2,7 @@ import {
   Chart,
   ChartConfiguration,
   Filler,
+  Interaction,
   Legend,
   LineController,
   LineElement,
@@ -12,7 +13,8 @@ import {
   Tooltip,
 } from "chart.js";
 import ChartStreaming from "chartjs-plugin-streaming";
-import { useEffect, useRef, useState } from "react";
+import useBuffer from "../../hooks/UseBuffer";
+import { useEffect, useRef } from "react";
 import "chartjs-adapter-date-fns";
 import "./Graphs.css";
 
@@ -20,10 +22,12 @@ interface ILineChart {
   label: string;
   color: string;
   rate: number; //ms
-  range?: number; //seconds
+  delay: number;
+  range: number; //seconds
 }
 
-function LineChart({ label, color }: Readonly<ILineChart>) {
+function LineChart({ label, color, rate, delay, range }: Readonly<ILineChart>) {
+  const { accessKey, clearKey } = useBuffer();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   Chart.register(
@@ -39,20 +43,36 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
     Legend
   );
 
+  function onRefresh(chart: Chart){
+    const data = accessKey(label);
+    for (const value of data) {
+      chart.data.labels?.push(new Date())
+      chart.data.datasets[0].data.push(value); // get from a data context;
+    }
+    clearKey(label);
+    chart.update();
+  }
+
   function commonOptions(title: string, color: string) {
+    const hoverLine = {
+      id: 'hoverline'
+    };
+
     const config = {
       type: "line",
+      animation: false,
       data: {
-        labels: [new Date()],
+        labels: [],
         datasets: [
           {
             label: title,
-            data: [0],
+            data: [],
             fill: false,
             borderColor: color,
             borderWidth: 2,
-            pointRadius: 1,
+            pointRadius: 0,
             cubicInterpolationMode: "monotone",
+            spanGaps: true,
             beginAtZero: true,
           },
         ],
@@ -68,14 +88,12 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
           x: {
             type: "realtime",
             realtime: {
-              duration: 20000,
-              refresh: 1000,
-              delay: 2000,
-              onRefresh: (chart: Chart) => {
-                chart.data.labels?.push(new Date());
-                chart.data.datasets[0].data.push(Math.random() * 20);
-                chart.update();
-              },
+              duration: range,
+              ttl: range+delay,
+              refresh: rate,
+              delay: delay,
+              framerate: 5,
+              onRefresh: onRefresh,
             },
           },
           y: {
@@ -101,7 +119,7 @@ function LineChart({ label, color }: Readonly<ILineChart>) {
 
   return (
     <div className="chart">
-      <canvas ref={canvasRef}></canvas>
+      <canvas ref={canvasRef} ></canvas>
     </div>
   );
 }

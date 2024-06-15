@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBaudList, handleConnect, handleGetPorts } from "../../utils/Utils";
+import { getBaudList, handleConnect, handleGetPorts, handleError } from "../../utils/Utils";
 import { Icon } from "@iconify/react";
 import useDevice from "../../hooks/UseDevice";
 import "./Connection.css";
@@ -30,6 +30,8 @@ function Connection() {
   const [portsListed, setPortsListed] = useState<string[]>([]);
 
   function handlePortChange(e: React.ChangeEvent<HTMLSelectElement>): void {
+    console.log(e.target.value)
+    if (!e.target.value) return;
     setPort(e.target.value);
   }
 
@@ -46,6 +48,7 @@ function Connection() {
       <label>
         Select your device:
         <select onChange={handlePortChange} disabled={device.connected}>
+          <option disabled> devices </option>
           {portsListed.length > 0 ? (
             portsListed.map((port) => {
               return (
@@ -83,7 +86,8 @@ function Connection() {
           text="connect"
           iconUrl="mdi:play-arrow"
           onClick={() => {
-            handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort,device.setConnected)
+            if (port) handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort,device.setConnected)
+            else handleError("Invalid input: No ports where selected");
           }}
         />
         <ConnectionButton

@@ -65,6 +65,20 @@ function generateRandomColor() {
   return randomColor;
 }
 
+function parseJson(jsonString:string){
+  try {
+    const jsonObject = JSON.parse(jsonString);
+    for (const key in jsonObject) {
+      if (typeof jsonObject[key] === 'string' && !isNaN(Number(jsonObject[key]))) {
+        jsonObject[key] = Number(jsonObject[key]);
+      }
+    }
+    return jsonObject;
+  } catch (error) {
+    return;
+  }
+}
+
 export {
   handleGetPorts,
   handleError,
@@ -72,4 +86,5 @@ export {
   handleSetFolder,
   getBaudList,
   generateRandomColor,
+  parseJson,
 };
