@@ -12,6 +12,7 @@
 }
 
 .menubar-option, .menubar-title {
+    color: #000000;
     box-sizing: border-box;
     font-weight: 300;
     margin: 0;
@@ -23,6 +24,7 @@
 }
 
 .menubar-option:hover {
+    color: #000000;
     border-bottom: 2px solid #FF4500;
 }
 

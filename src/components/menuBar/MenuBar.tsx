@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./MenuBar.css";
 
 interface MenuBarOptionProps {
@@ -37,13 +37,21 @@ function MenuDropdown({ urls, text }: Readonly<MenuDropdownProps>) {
   );
 }
 
+function MenuBarLink({ url, text }: Readonly<MenuBarOptionProps>) {
+  return (
+    <Link className="menubar-option" to={url} target="_blank">
+      {text}
+    </Link>
+  );
+}
+
 function MenuBar() {
   return (
     <div className="menubar">
       <MenuBarOption url="/connection" text="Connection" />
       <MenuBarOption url="/data" text="Data" />
       <MenuBarOption url="/options" text="Options" />
-      <MenuBarOption url="/help" text="Help" />
+      <MenuBarLink url="https://github.com/Danilosrr" text="Help" />
     </div>
   );
 }
