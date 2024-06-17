@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBaudList, handleConnect, handleGetPorts, handleError } from "../../utils/Utils";
+import { getBaudList, handleConnect, handleGetPorts, handleError, handleWindow } from "../../utils/Utils";
 import { Icon } from "@iconify/react";
 import useDevice from "../../hooks/UseDevice";
 import "./Connection.css";
@@ -29,6 +29,8 @@ function Connection() {
   const [port, setPort] = useState<string>('');
   const [portsListed, setPortsListed] = useState<string[]>([]);
 
+  const running = device.devicePort && device.connected;
+
   function handlePortChange(e: React.ChangeEvent<HTMLSelectElement>): void {
     console.log(e.target.value)
     if (!e.target.value) return;
@@ -41,6 +43,7 @@ function Connection() {
 
   useEffect(() => {
     handleGetPorts(setPortsListed);
+    if (running) setPort(device.devicePort as string);
   }, []);
 
   return (
@@ -76,11 +79,19 @@ function Connection() {
       </label>
       <section>
       {device.connected?
-      <ConnectionButton 
-        text="disconnect" 
-        iconUrl="mdi:lan-disconnect" 
-        onClick={device.handleDisconnect}
-      />:
+      <>
+        <ConnectionButton 
+          text="disconnect" 
+          iconUrl="mdi:lan-disconnect" 
+          onClick={device.handleDisconnect}
+        />
+        <ConnectionButton
+          text="Payload"
+          iconUrl="mdi:package-variant"
+          onClick={()=>handleWindow('payload')}
+        />
+      </>
+      :
       <>
         <ConnectionButton
           text="connect"

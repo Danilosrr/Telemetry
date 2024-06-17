@@ -44,7 +44,7 @@ pub fn start_clone_thread(
                             received_data.push(byte[0] as char);
                             if received_data.ends_with('\n') {
                                 let data_str = received_data.trim_end_matches('\n').to_string();
-                                println!("Received: {}", data_str);
+                                //println!("Received: {}", data_str);
                                 received_data.clear();
                                 app.emit_all("updateSerial", Payload { message: data_str })
                                     .unwrap();

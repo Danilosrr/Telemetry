@@ -54,10 +54,6 @@ function LineChart({ label, color, rate, delay, range }: Readonly<ILineChart>) {
   }
 
   function commonOptions(title: string, color: string) {
-    const hoverLine = {
-      id: 'hoverline'
-    };
-
     const config = {
       type: "line",
       animation: false,
@@ -97,6 +93,8 @@ function LineChart({ label, color, rate, delay, range }: Readonly<ILineChart>) {
             },
           },
           y: {
+            suggestedMin: -5,
+            suggestedMax: 5,
             display: true,
             beginAtZero: true,
             ticks: {

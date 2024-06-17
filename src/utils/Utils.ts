@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import { WebviewWindow } from "@tauri-apps/api/window";
 
 interface IDevice {
   port: string;
@@ -79,6 +80,18 @@ function parseJson(jsonString:string){
   }
 }
 
+function handleWindow(label:string) {
+  const newWindow = new WebviewWindow(label,{
+    url:`/${label.toLowerCase()}`,
+    height: 400,
+    width: 400,
+    decorations: false,
+    resizable: true,
+    closable: true
+  })
+  return newWindow;
+}
+
 export {
   handleGetPorts,
   handleError,
@@ -87,4 +100,5 @@ export {
   getBaudList,
   generateRandomColor,
   parseJson,
+  handleWindow
 };

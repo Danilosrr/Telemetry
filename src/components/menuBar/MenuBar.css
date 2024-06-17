@@ -11,7 +11,7 @@
     right: 0;
 }
 
-.menubar-option {
+.menubar-option, .menubar-title {
     box-sizing: border-box;
     font-weight: 300;
     margin: 0;
@@ -24,4 +24,17 @@
 
 .menubar-option:hover {
     border-bottom: 2px solid #FF4500;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    overflow: auto;
+    background-color:#F6F6F6;
+    border-radius:5px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+  
+.dropdown:hover .dropdown-options {
+    display: block;
 }

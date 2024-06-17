@@ -6,12 +6,14 @@ import "./Graphs.css";
 import { listen } from "@tauri-apps/api/event";
 import { Payload } from "../../contexts/BufferContext";
 import useBuffer from "../../hooks/UseBuffer";
+import Loader from "../loader/Loader";
 
 function Graphs() {
-  const { devicePort } = useDevice();
+  const { devicePort, connected } = useDevice();
   const { append, accessBuffer } = useBuffer();
   const [dataKeys, setDataKeys] = useState<string[]>([]);
   const buffer = accessBuffer();
+  const running = devicePort && connected;
 
   function updateFormat() {
     if (Object.keys(buffer).length === 0) {
@@ -34,13 +36,13 @@ function Graphs() {
       const json = parseJson(event.payload.message);
       if (json) append(json);
     });
-    if (devicePort) updateFormat();
+    if (running) updateFormat();
     return () => {
       unlisten.then((f) => f());
     };
   }, []);
 
-  if (devicePort && dataKeys.length>0) {
+  if (running && dataKeys.length>0) {
     return (
       <section className="chartContainer">
         {dataKeys.map((key) => {
@@ -52,7 +54,7 @@ function Graphs() {
     );
   }
 
-  if (!devicePort) {
+  if (!running) {
     return (
       <div className="chartWarning">
         <h5>Connect to a device or upload data</h5>
@@ -62,10 +64,7 @@ function Graphs() {
 
   if (dataKeys.length==0) {
     return (
-      <div className="chartWarning">
-        <span className="loader"></span>
-        <h5>Initializing device...</h5>
-      </div>
+        <Loader text="Initializing device..."/>
     )
   }
 }

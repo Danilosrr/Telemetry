@@ -3,6 +3,7 @@ import Home from "./page/Home";
 import { DeviceProvider } from "./contexts/DeviceContext";
 import { BufferProvider } from "./contexts/BufferContext";
 import Data from "./page/Data";
+import Payload from "./page/Payload";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/connection" element={<Home />} />
           <Route path="/data" element={<Data />} />
+          <Route path="/payload" element={<Payload />} />
           <Route path="/options" element={<Home />} />
           <Route path="/help" element={<Home />} />
         </Routes>

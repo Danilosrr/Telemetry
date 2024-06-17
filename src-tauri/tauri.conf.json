@@ -18,6 +18,7 @@
       },
       "window": {
         "all": false,
+        "create": true,
         "close": true,
         "hide": true,
         "show": true,

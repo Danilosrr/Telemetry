@@ -6,12 +6,34 @@ interface MenuBarOptionProps {
   text: string;
 }
 
+interface MenuDropdownProps {
+  urls: string[];
+  text: string;
+}
+
 function MenuBarOption({ url, text }: Readonly<MenuBarOptionProps>) {
   const navigate = useNavigate();
   return (
     <h2 className="menubar-option" onClick={() => navigate(url)}>
       {text}
     </h2>
+  );
+}
+
+function MenuDropdown({ urls, text }: Readonly<MenuDropdownProps>) {
+  const navigate = useNavigate();
+
+  return (
+    <div className="dropdown">
+      <h2 className="menubar-title">{text}</h2>
+      <div className="dropdown-options">
+        {urls.map((url) => {
+          return (
+            <h2 key={url} className="menubar-option" onClick={() => navigate("/"+url.toLowerCase())}>{url}</h2>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 

@@ -4,7 +4,7 @@ export interface Payload {
     message: string;
 }
 
-interface Reading {
+export interface Reading {
     [key:string]: number;
 }
 
