@@ -1,7 +1,7 @@
 import "./Loader.css";
 
 interface ILoader {
-    text: string;
+    text?: string;
 }
 
 function Loader({text}:Readonly<ILoader>) {

@@ -3,13 +3,14 @@ import { Payload, Reading } from "../../contexts/BufferContext";
 import "./LiveReading.css";
 import { listen } from "@tauri-apps/api/event";
 import { parseJson } from "../../utils/Utils";
+import Loader from "../loader/Loader";
 
 function LiveReading() {
   const [payload, setPayload] = useState<Reading>({});
   const [size, setSize] = useState<number>(0);
 
-  function setColor(value:number){
-    return value>=0?  'positive': 'negative'
+  function setColor(value: number) {
+    return value >= 0 ? "positive" : "negative";
   }
 
   useEffect(() => {
@@ -29,19 +30,28 @@ function LiveReading() {
 
   return (
     <section className="payloadBg">
-      <div className="payload">
-        <label>size: 
-          <input type="text" value={`${size}B`} disabled/>
-        </label> 
-        {Object.keys(payload).map((key) => {
-          return (
-          <label key={key}>
-            {key}: 
-            <input className={setColor(payload[key])} type="text" value={payload[key]} disabled/>
+      {Object.keys(payload).length > 0 ? (
+        <div className="payload">
+          <label>
+            size: <input type="text" value={`${size}B`} disabled />
           </label>
-          );
-        })}
-      </div>
+          {Object.keys(payload).map((key) => {
+            return (
+              <label key={key}>
+                {key}:
+                <input
+                  className={setColor(payload[key])}
+                  type="text"
+                  value={payload[key]}
+                  disabled
+                />
+              </label>
+            );
+          })}
+        </div>
+      ) : (
+        <Loader text="waiting device connection" />
+      )}
     </section>
   );
 }

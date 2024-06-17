@@ -1,13 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
+import { handleWindow } from "../../utils/Utils";
 import "./MenuBar.css";
 
 interface MenuBarOptionProps {
   url: string;
-  text: string;
-}
-
-interface MenuDropdownProps {
-  urls: string[];
   text: string;
 }
 
@@ -20,18 +16,15 @@ function MenuBarOption({ url, text }: Readonly<MenuBarOptionProps>) {
   );
 }
 
-function MenuDropdown({ urls, text }: Readonly<MenuDropdownProps>) {
+function DataDropdown({ text }: Readonly<{text:string}>) {
   const navigate = useNavigate();
 
   return (
     <div className="dropdown">
       <h2 className="menubar-title">{text}</h2>
       <div className="dropdown-options">
-        {urls.map((url) => {
-          return (
-            <h2 key={url} className="menubar-option" onClick={() => navigate("/"+url.toLowerCase())}>{url}</h2>
-          );
-        })}
+        <h2 className="menubar-option" onClick={() => navigate("/graphs")}>Graphs</h2>
+        <h2 className="menubar-option" onClick={() => handleWindow("payload")}>Payload</h2>
       </div>
     </div>
   );
@@ -49,7 +42,7 @@ function MenuBar() {
   return (
     <div className="menubar">
       <MenuBarOption url="/connection" text="Connection" />
-      <MenuBarOption url="/data" text="Data" />
+      <DataDropdown text="Data" />
       <MenuBarOption url="/options" text="Options" />
       <MenuBarLink url="https://github.com/Danilosrr" text="Help" />
     </div>

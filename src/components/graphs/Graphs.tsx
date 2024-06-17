@@ -64,7 +64,7 @@ function Graphs() {
 
   if (dataKeys.length==0) {
     return (
-        <Loader text="Initializing device..."/>
+        <Loader text="Initializing device"/>
     )
   }
 }

@@ -2,7 +2,6 @@ import {
   Chart,
   ChartConfiguration,
   Filler,
-  Interaction,
   Legend,
   LineController,
   LineElement,
@@ -111,7 +110,7 @@ function LineChart({ label, color, rate, delay, range }: Readonly<ILineChart>) {
   useEffect(() => {
     const chart = canvasRef.current as HTMLCanvasElement;
 
-    new Chart(chart, commonOptions(label, color));
+    new Chart(chart, commonOptions(label, color)).render();
   }, []);
 
 
