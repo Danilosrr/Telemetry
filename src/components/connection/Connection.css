@@ -27,4 +27,5 @@
 }
 .connection button:active {
     background-color: #FF672E;
+    color: #FAFAFA;
 }

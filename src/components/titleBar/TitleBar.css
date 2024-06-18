@@ -1,5 +1,6 @@
 .titlebar {
   z-index: 1;
+  cursor: default;
   height: 30px;
   background: #EBEBEB;
   user-select: none;
@@ -17,9 +18,10 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
+  width: 24px;
+  height: 24px;
+  margin: auto 0;
+  border-radius: 12px;
   background: none;
 }
 

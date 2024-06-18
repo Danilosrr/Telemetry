@@ -1,0 +1,62 @@
+.uploadData {
+    background-color: #FAFAFA;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.uploadData button {
+    margin: 10px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 30px;
+}
+
+.uploadData button:hover {
+    border-color: #FF4500;
+}
+
+.uploadData button:active {
+    background-color: #FF672E;
+    color: #FAFAFA;
+}
+
+.dropContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: content-box;
+    padding: 10px;
+    min-height: 200px;
+    height: 30%;
+    min-width: 200px;
+    width: 80%;
+    border-radius: 5px;
+    border: 2px dashed #808080;
+}
+
+.buttonContainer {
+    display: flex;
+}
+
+.success, .warning, .pending {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.success {
+    color: #4BB543;
+}
+
+.warning {
+    color: #CC3300;
+}
+

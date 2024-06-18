@@ -57,7 +57,7 @@ function Graphs() {
   if (!running) {
     return (
       <div className="chartWarning">
-        <h5>Connect to a device or upload data</h5>
+        <h5>Connect to a device</h5>
       </div>
     )
   }
