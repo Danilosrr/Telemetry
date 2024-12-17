@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Payload, Reading } from "../../contexts/BufferContext";
 import "./LiveReading.css";
 import { listen } from "@tauri-apps/api/event";
@@ -7,20 +7,19 @@ import Loader from "../loader/Loader";
 
 function LiveReading() {
   const [payload, setPayload] = useState<Reading>({});
-  const [size, setSize] = useState<number>(0);
 
-  function setColor(value: number) {
-    return value >= 0 ? "positive" : "negative";
-  }
+
+  const setColor = useMemo(() => {
+    return (value: number) => {
+      return value >= 0 ? "positive" : "negative";
+    };
+  }, []);
 
   useEffect(() => {
     const unlisten = listen<Payload>("updateSerial", (event) => {
       const json = parseJson(event.payload.message);
       if (json) {
-        setPayload(json);
-        if (event.payload.message.length != size) {
-          setSize(event.payload.message.length);
-        }
+        setPayload({ ...json, size: event.payload.message.length });
       }
     });
     return () => {
@@ -33,19 +32,21 @@ function LiveReading() {
       {Object.keys(payload).length > 0 ? (
         <div className="payload">
           <label>
-            size: <input type="text" value={`${size}B`} disabled />
+            size: <input type="text" value={`${payload.size}B`} disabled />
           </label>
           {Object.keys(payload).map((key) => {
             return (
-              <label key={key}>
-                {key}:
-                <input
-                  className={setColor(payload[key])}
-                  type="text"
-                  value={payload[key]}
-                  disabled
-                />
-              </label>
+              key != "size" && (
+                <label key={key}>
+                  {key}:
+                  <input
+                    className={setColor(payload[key])}
+                    type="text"
+                    value={payload[key]}
+                    disabled
+                  />
+                </label>
+              )
             );
           })}
         </div>

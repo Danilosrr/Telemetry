@@ -26,7 +26,7 @@ export function DeviceProvider({ children }: Readonly<{ children: React.ReactNod
 
   async function handleDisconnect() {
     if (!connected) return 
-    await invoke("set_port_items", {});
+    invoke("set_port_items", {});
     await invoke("handle_serial_connect", {});
     setBaudrate(undefined);
     setDevicePort(undefined);

@@ -25,7 +25,8 @@
     width: 45px;
     text-align: center;
     height: 8px;
-    border: none;
+    border: 1px solid #EBEBEB;
+    box-shadow: unset;
 }
 
 .positive{
