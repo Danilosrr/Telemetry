@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import { handleError } from "../utils/Utils";
 
 interface IDeviceContext {
   devicePort: string | undefined;
@@ -7,8 +8,13 @@ interface IDeviceContext {
   baudrate: string | undefined;
   setBaudrate: (rate: string) => void;
   connected: boolean;
-  setConnected: (connection: boolean) => void;
   handleDisconnect: () => void;
+  handleConnect: (device: IDevice) => void;
+}
+
+interface IDevice {
+  port: string;
+  baudrate: string;
 }
 
 export const DeviceContext = createContext<IDeviceContext | null>(null);
@@ -19,15 +25,33 @@ export function DeviceProvider({ children }: Readonly<{ children: React.ReactNod
   const [connected, setConnected] = useState<boolean>(false);
 
   async function handleDisconnect() {
-    invoke("set_port_items", {});
+    if (!connected) return 
+    await invoke("set_port_items", {});
     await invoke("handle_serial_connect", {});
     setBaudrate(undefined);
     setDevicePort(undefined);
     setConnected(false);
   }
 
+  async function handleConnect(
+    device: IDevice,
+  ) {
+    try {
+      await invoke("set_port_items", { ...device });
+      const serial = await invoke("handle_serial_connect", {});
+      if (serial) {
+        setBaudrate(device.baudrate);
+        setDevicePort(device.port);
+        setConnected(true);
+      }
+    } catch (error) {
+      handleError("Could not connect to device");
+      console.log(`serial catch`);
+    }
+  }
+
   return (
-    <DeviceContext.Provider value={{ devicePort, baudrate, setDevicePort, setBaudrate, handleDisconnect, connected, setConnected }}>
+    <DeviceContext.Provider value={{ devicePort, baudrate, setDevicePort, setBaudrate, handleDisconnect, handleConnect, connected }}>
       {children}
     </DeviceContext.Provider>
   );

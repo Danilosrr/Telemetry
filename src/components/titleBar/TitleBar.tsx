@@ -1,6 +1,7 @@
 import { appWindow } from "@tauri-apps/api/window";
 import { Icon } from '@iconify/react';
 import "./TitleBar.css";
+import useDevice from "../../hooks/UseDevice";
 
 interface TitleBarButtonProps {
   onClick: () => void;
@@ -16,6 +17,7 @@ function TitleBarButton({onClick,iconUrl}: Readonly<TitleBarButtonProps>) {
 }
 
 function TitleBar() {
+  const { handleDisconnect } = useDevice();
   return (
     <div className="titlebar">
       <h1 data-tauri-drag-region  className="title">Telemetry v1.0</h1>
@@ -28,7 +30,10 @@ function TitleBar() {
         iconUrl="mdi:window-maximize"
       />
       <TitleBarButton
-        onClick={() => appWindow.close()}
+        onClick={() => {
+          handleDisconnect(); 
+          appWindow.close();
+        }}
         iconUrl="mdi:close"
       />
     </div>

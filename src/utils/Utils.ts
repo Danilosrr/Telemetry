@@ -1,11 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { WebviewWindow } from "@tauri-apps/api/window";
 
-interface IDevice {
-  port: string;
-  baudrate: string;
-}
-
 async function handleGetPorts(
   setPortsListed: React.Dispatch<React.SetStateAction<string[]>>
 ) {
@@ -15,26 +10,6 @@ async function handleGetPorts(
 
 async function handleError(input: string) {
   await invoke("emit_error", { input });
-}
-
-async function handleConnect(
-  device: IDevice,
-  setBaudrate: (rate: string) => void,
-  setDevicePort: (port: string) => void,
-  setConnected: (connection: boolean) => void,
-) {
-  try {
-    invoke("set_port_items", { ...device });
-    const serial = await invoke("handle_serial_connect", {});
-    if (serial) {
-      setBaudrate(device.baudrate);
-      setDevicePort(device.port);
-      setConnected(true);
-    }
-  } catch (error) {
-    handleError("Could not connect to device");
-    console.log(`serial catch`);
-  }
 }
 
 function getBaudList() {
@@ -95,7 +70,6 @@ function handleWindow(label:string) {
 export {
   handleGetPorts,
   handleError,
-  handleConnect,
   handleSetFolder,
   getBaudList,
   generateRandomColor,

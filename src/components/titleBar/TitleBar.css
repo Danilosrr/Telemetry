@@ -27,6 +27,7 @@
 
 .titlebar-button:hover {
   background: #D1D1D1;
+  cursor: pointer;
 }
 
 .title {

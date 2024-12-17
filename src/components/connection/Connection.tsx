@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getBaudList, handleConnect, handleGetPorts, handleError, handleWindow } from "../../utils/Utils";
+import { getBaudList, handleGetPorts, handleError, handleWindow } from "../../utils/Utils";
 import { Icon } from "@iconify/react";
 import useDevice from "../../hooks/UseDevice";
 import "./Connection.css";
@@ -97,7 +97,7 @@ function Connection() {
           text="connect"
           iconUrl="mdi:play-arrow"
           onClick={() => {
-            if (port) handleConnect({port,baudrate},device.setBaudrate,device.setDevicePort,device.setConnected)
+            if (port) device.handleConnect({port,baudrate})
             else handleError("Invalid input: No ports where selected");
           }}
         />
