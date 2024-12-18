@@ -1,0 +1,27 @@
+.liveModel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 30px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+}
+
+.themeButton {
+    position: fixed;
+    font-size: 28px;
+    bottom: 30px;
+    left: 30px;
+}
+
+.light {
+    color: #000;
+    background-color: #fff;
+}
+.dark {
+    color: #fff;
+    background-color: #000;
+}

@@ -25,6 +25,7 @@ function DataDropdown({ text }: Readonly<{text:string}>) {
       <div className="dropdown-options">
         <h2 className="menubar-option" onClick={() => navigate("/graphs")}>Graphs</h2>
         <h2 className="menubar-option" onClick={() => handleWindow("payload")}>Payload</h2>
+        <h2 className="menubar-option" onClick={() => handleWindow("model")}>Model</h2>
         <h2 className="menubar-option" onClick={() => navigate("/upload")}>Upload</h2>
       </div>
     </div>
