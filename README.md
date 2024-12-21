@@ -1,9 +1,6 @@
-# Generic telemetry system
+# Multi-purpose telemetry system
 
 This document should help you understand the motivations that led to the development of this software and the technical decisions involved.
-
-## Context
-
 We need a telemetry system that is capable of acquiring data from multiple sensors on a moving vehicle and transmitting or storing it in a way that it can be analyzed. The system must be efficient and as inexpensive as possible.
 
 ## Decision Drivers
