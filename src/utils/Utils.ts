@@ -5,6 +5,7 @@ async function handleGetPorts(
   setPortsListed: React.Dispatch<React.SetStateAction<string[]>>
 ) {
   const ports: string[] = await invoke("get_ports", {});
+  console.log(ports)
   setPortsListed(ports);
 }
 

@@ -14,7 +14,7 @@ struct Payload {
 
 pub fn list_ports() -> Vec<String> {
     let ports = serialport::available_ports().expect("No ports found!");
-    let port_list: Vec<String> = ports.iter().map(|p| p.port_name.clone()).collect();
+    let port_list: Vec<String> = ports.iter().filter(|p| p.port_type != serialport::SerialPortType::Unknown).map(|p| p.port_name.clone()).collect();
     return port_list;
 }
 
